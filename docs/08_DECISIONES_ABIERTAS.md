@@ -29,3 +29,17 @@ Este documento evita que propuestas iniciales se conviertan silenciosamente en c
 ## Criterios de adopción de decisiones
 
 Toda decisión relevante deberá incluir: problema, alternativas, evidencia disponible, riesgos para menores, costo estimado, consecuencia pedagógica y condición de revisión.
+
+## Propuestas adicionales de v2 (pendientes de revisión)
+
+| ID | Tema | Estado | Criterio / siguiente paso |
+| --- | --- | --- | --- |
+| D-011 | Misiones con propósito y manipulación antes de un examen | Propuesta | Implementar «Detective de ofertas»; revisión docente y QA adulto |
+| D-012 | Separar modo Explorar de modo Revisión/Evaluación | Decisión metodológica requerida | No convertir desafíos posteriores a una intervención en `baseline` |
+| D-013 | Andamiaje por reglas deterministas y alternativas | Propuesta | Evitar inferencias de identidad/capacidad; tests de filtración de soluciones |
+| D-014 | Uso de IA en misión v2 | Fuera de alcance | Validar utilidad de pedagogía sin proveedor ni datos de menores |
+| D-015 | Contenido no comercial equivalente | Abierta | Diseñar contexto alternativo junto a docentes |
+| D-016 | Estado de sesión | Restricción actual | Memoria temporal, sin persistir respuestas ni datos de menores |
+| D-017 | Métricas de motivación/retención | Hipótesis por estudiar | No optimizar tiempo de pantalla, clicks ni rachas |
+
+[Fundamentos, límites y priorización de v2](product/PLAN_EXPERIENCIA_V2.md) · [Paquetes de ejecución](product/EJECUCION_V2.md).
