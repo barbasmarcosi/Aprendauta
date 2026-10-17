@@ -43,6 +43,20 @@ La inteligencia artificial es un medio, no el fin. Aprendauta nunca debe sustitu
 - **Transparencia:** distinguir hipótesis, decisiones de diseño y resultados medidos.
 - **Sostenibilidad social:** evitar dependencias innecesarias y diseñar para costos operativos razonables.
 
+## Documentación fundacional
+
+- [Manifiesto](docs/01_MANIFIESTO.md)
+- [Principios pedagógicos](docs/02_PRINCIPIOS_PEDAGOGICOS.md)
+- [Primer MVP y alcance provisional](docs/03_MVP_Y_ALCANCE.md)
+- [Protección de menores y datos](docs/04_PROTECCION_INFANCIA_Y_DATOS.md)
+- [Evaluación de impacto y aprendizaje autónomo](docs/05_EVALUACION_DE_IMPACTO.md)
+- [Hoja de ruta](docs/06_ROADMAP.md)
+- [Arquitectura inicial](docs/07_ARQUITECTURA_INICIAL.md)
+- [Decisiones y supuestos abiertos](docs/08_DECISIONES_ABIERTAS.md)
+- [Cómo contribuir](CONTRIBUTING.md)
+
+El trabajo fundacional se revisa en el [PR #1](https://github.com/barbasmarcosi/Aprendauta/pull/1). Las tareas iniciales quedan registradas en [Issues](https://github.com/barbasmarcosi/Aprendauta/issues).
+
 ## Participar
 
 Este repositorio recogerá decisiones, propuestas y avances del proyecto. Las contribuciones técnicas, pedagógicas y comunitarias serán bienvenidas una vez definidas las pautas de colaboración y protección infantil.
