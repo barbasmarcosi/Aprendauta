@@ -101,7 +101,7 @@ La demo puede alojarse en **GitHub Pages** sin backend, pagos ni servicios de IA
 
 La rama **`gh-pages`** contiene una versión preparada para publicar, con manifiesto PWA, íconos PNG y modo offline mediante service worker. El alcance usa rutas relativas para funcionar bajo `/Aprendauta/`.
 
-**Activación necesaria en GitHub:** [Settings → Pages](https://github.com/barbasmarcosi/Aprendauta/settings/pages) → **Deploy from a branch** → **`gh-pages`** → **`/(root)`** → **Save**. Hasta configurar Pages y verificar su disponibilidad, no debe anunciarse una URL activa.
+**Demo publicada:** https://barbasmarcosi.github.io/Aprendauta/ — GitHub Actions ejecuta las pruebas y publica automáticamente cada actualización de `gh-pages`. [Ver el workflow](https://github.com/barbasmarcosi/Aprendauta/actions/workflows/deploy-pages.yml). No hace falta configurar un dominio propio.
 
 [Guía de publicación, instalación y pruebas de PWA](docs/research/DESPLIEGUE_PAGES_PWA.md).
 

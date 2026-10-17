@@ -35,17 +35,6 @@ jobs:
       - name: Validar tests
         run: npm test
 
-      - name: Intentar reparar Pages y quitar dominio incorrecto
-        id: repair
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          # La API puede requerir administración adicional a GITHUB_TOKEN.
-          # Si no está permitido, el workflow sigue y el error queda explícito.
-          printf '{"build_type":"workflow","cname":null}\n' |
-            gh api --method PUT "repos/${GITHUB_REPOSITORY}/pages" --input -
-
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 

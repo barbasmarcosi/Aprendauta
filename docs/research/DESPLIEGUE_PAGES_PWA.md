@@ -4,6 +4,27 @@
 
 La demo es **100 % estática**: HTML, CSS, módulos JavaScript y contenido educativo determinista. No hay servidor, cuentas ni llamadas a modelos; GitHub Pages ofrece HTTPS y alojamiento gratuito compatible con este alcance.
 
+## Publicación automatizada con Actions
+
+**URL pública comprobada:** https://barbasmarcosi.github.io/Aprendauta/
+
+Cada `push` a la rama `gh-pages` dispara [`.github/workflows/deploy-pages.yml`](https://github.com/barbasmarcosi/Aprendauta/blob/gh-pages/.github/workflows/deploy-pages.yml). El workflow:
+
+1. Descarga únicamente `gh-pages` y ejecuta las pruebas con Node.js 22.
+2. Empaqueta la demo estática en `_site` (sin tests, investigaciones ni documentos internos).
+3. Publica el artefacto mediante `actions/configure-pages`, `upload-pages-artifact` y `deploy-pages`.
+4. Muestra la URL pública y el resultado de la ejecución.
+
+Primera publicación correcta: [workflow #1](https://github.com/barbasmarcosi/Aprendauta/actions/runs/39069809211), **19/19 tests** y despliegue exitoso. Un intento inicial de cambiar la configuración administrativa con el token de Actions devolvió HTTP 403; se retiró del workflow porque **no es necesario** para publicar. El acceso público y los recursos estáticos fueron verificados posteriormente.
+
+**Importante:** `main` permanece intacta. Los PR pedagógicos siguen abiertos en borrador y la rama `gh-pages` es únicamente un canal de publicación experimental, sin cuentas ni datos de menores.
+
+# Aprendauta: PWA y GitHub Pages
+
+## Por qué Pages
+
+La demo es **100 % estática**: HTML, CSS, módulos JavaScript y contenido educativo determinista. No hay servidor, cuentas ni llamadas a modelos; GitHub Pages ofrece HTTPS y alojamiento gratuito compatible con este alcance.
+
 ## Cómo publicar la versión experimental sin tocar `main`
 
 1. En el repositorio, abrir **Settings → Pages**.
