@@ -95,6 +95,18 @@ El demostrador incorpora [feedback contextual por reglas revisables](docs/resear
 
 **La coincidencia con una regla no prueba cómo razonó una persona**. No hay perfilado, IA ni almacenamiento. Diagnóstico inicial y transferencia final permanecen sin ayudas. Este enfoque necesita revisión docente y pruebas de aprendizaje antes de uso con menores.
 
+## Publicación estática y PWA (demo experimental)
+
+La demo puede alojarse en **GitHub Pages** sin backend, pagos ni servicios de IA.
+
+La rama **`gh-pages`** contiene una versión preparada para publicar, con manifiesto PWA, íconos PNG y modo offline mediante service worker. El alcance usa rutas relativas para funcionar bajo `/Aprendauta/`.
+
+**Activación necesaria en GitHub:** [Settings → Pages](https://github.com/barbasmarcosi/Aprendauta/settings/pages) → **Deploy from a branch** → **`gh-pages`** → **`/(root)`** → **Save**. Hasta configurar Pages y verificar su disponibilidad, no debe anunciarse una URL activa.
+
+[Guía de publicación, instalación y pruebas de PWA](docs/research/DESPLIEGUE_PAGES_PWA.md).
+
+La PWA es una **demo para evaluación por personas adultas**. Sus actividades no fueron validadas pedagógicamente ni está autorizada para realizar pilotos con menores.
+
 ## Participar
 
 Este repositorio recogerá decisiones, propuestas y avances del proyecto. Las contribuciones técnicas, pedagógicas y comunitarias serán bienvenidas una vez definidas las pautas de colaboración y protección infantil.
