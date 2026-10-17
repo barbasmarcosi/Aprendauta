@@ -107,6 +107,24 @@ La rama **`gh-pages`** contiene una versión preparada para publicar, con manifi
 
 La PWA es una **demo para evaluación por personas adultas**. Sus actividades no fueron validadas pedagógicamente ni está autorizada para realizar pilotos con menores.
 
+## Plan de experiencia educativa v2 — de ejercicios a misiones
+
+Tras una auditoría exploratoria de la demo, se definió una evolución enfocada en **curiosidad, experimentación, autonomía y accesibilidad**, empezando por una misión «Detective de ofertas». **Es un plan, no una funcionalidad desplegada.**
+
+- [Plan de experiencia y decisiones pedagógicas](docs/product/PLAN_EXPERIENCIA_V2.md)
+- [Guion de la primera misión interactiva](docs/product/MISION_DESCUENTOS_V2.md)
+- [Arquitectura sin IA y sin backend](docs/product/ARQUITECTURA_INTERACTIVA_V2.md)
+- [Paquetes de ejecución, prioridades y criterios de aceptación](docs/product/EJECUCION_V2.md)
+- [Validación docente, accesibilidad y puertas de seguridad](docs/product/VALIDACION_V2.md)
+
+**Criterio central:** el modo libre de explorar no puede confundirse con una evaluación diagnóstica anterior al aprendizaje. Solo debemos informar lo que realmente se pudo resolver de forma independiente. Las pruebas con menores siguen bloqueadas hasta cumplir los controles exigidos.
+
+## Backlog de implementación v2
+
+La planificación se revisa en el [PR #11](https://github.com/barbasmarcosi/Aprendauta/pull/11). Las siete tareas de ejecución están registradas en [issues #12–#18](https://github.com/barbasmarcosi/Aprendauta/issues?q=is%3Aissue+is%3Aopen+%22Aprendauta+v2%22), con dependencias y criterios de aceptación; el [plan de ejecución](docs/product/EJECUCION_V2.md) las organiza.
+
+**La nueva misión aún no está implementada:** la demo de Pages permanece como prototipo de nueve ejercicios.
+
 ## Participar
 
 Este repositorio recogerá decisiones, propuestas y avances del proyecto. Las contribuciones técnicas, pedagógicas y comunitarias serán bienvenidas una vez definidas las pautas de colaboración y protección infantil.

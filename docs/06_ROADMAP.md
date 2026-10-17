@@ -69,3 +69,17 @@ Ampliar asignaturas y edades solo después de verificar contenido, protección i
 ## Reglas para priorizar
 
 Orden sugerido: seguridad → utilidad pedagógica → autonomía → accesibilidad → sostenibilidad → sofisticación técnica. No introducir agentes, dashboards o gamificación únicamente porque sean atractivos desde la ingeniería.
+
+## Incremento F1 → F2 · Experiencia de aprendizaje v2 (propuesto)
+
+El recorrido de nueve ejercicios verifica un circuito técnico, **no** su eficacia ni un nivel de motivación adecuado para adolescentes. El siguiente incremento propone un vertical slice de aprendizaje con misión concreta, manipulación accesible, ayudas con alternativas y transferencia independiente.
+
+**Plan operativo:** [experiencia](product/PLAN_EXPERIENCIA_V2.md) · [misión](product/MISION_DESCUENTOS_V2.md) · [ejecución](product/EJECUCION_V2.md) · [validación](product/VALIDACION_V2.md).
+
+Orden de hitos: diseñar el aprendizaje → implementar una misión → adaptar explicaciones sin diagnóstico del alumno → proteger evaluación y accesibilidad → verificar con personas adultas/docentes → **solo si se autorizan todos los controles**, plantear un piloto con menores.
+
+### Restricción metodológica decisiva
+
+«Explorar primero» es apropiado para invitar a descubrir, pero invalida interpretar cualquier prueba posterior como **línea de base sin instrucción**. Separar un **modo Explorar** de un **modo Revisión/Evaluación para adultos** es requisito de F1/F2.
+
+No se ampliará a más asignaturas ni IA generativa antes de tener un circuito de aprendizaje y medición responsables.
