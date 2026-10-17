@@ -1,26 +1,66 @@
-import { EXERCISES, PHASES, getExercise, checkAnswer, getSummary } from './engine.mjs';
+import { PHASES, createSequence, getExercise, checkAnswer, getSummary } from './engine.mjs';
 
 const host = document.querySelector('#app');
 const main = document.querySelector('#content');
 let state = makeSession();
 
-function makeSession() {
-  return { index: 0, attempts: 0, hintsShown: 0, submitted: false, correct: false, message: '', records: [] };
+function makeSession(form = 'A') {
+  return { form, exercises: createSequence(form), index: 0, attempts: 0, hintsShown: 0, submitted: false, correct: false, message: '', records: [] };
 }
-function element(tag, className, value) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (value !== undefined) node.textContent = value;
-  return node;
+function element(tag, className, text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
 }
 function button(label, secondary, onClick) {
-  const node = element('button', secondary ? 'secondary' : 'primary', label);
-  node.type = 'button';
-  node.addEventListener('click', onClick);
-  return node;
+  const el = element('button', secondary ? 'secondary' : 'primary', label);
+  el.type = 'button';
+  el.addEventListener('click', onClick);
+  return el;
 }
 function resetView() { host.replaceChildren(); }
 function goTop() { main.focus({ preventScroll: true }); window.scrollTo(0, 0); }
+/** Relaciona imagen, texto y concepto; solo se renderiza durante práctica. */
+function renderVisual(visual) {
+  const figure = element('figure', 'learning-visual');
+  figure.setAttribute('aria-label', visual.alt);
+  const intro = element('p', 'visual-heading', 'Pensalo de otra manera');
+  const surface = element('div', visual.type === 'grid' ? 'hundred-grid' : visual.type === 'bar' ? 'percent-bar' : 'fraction-strip');
+  surface.setAttribute('aria-hidden', 'true');
+  if (visual.type === 'bar') {
+    const discount = element('span', 'filled');
+    discount.style.width = visual.numerator + '%';
+    const rest = element('span', 'empty');
+    rest.style.width = (visual.denominator - visual.numerator) + '%';
+    surface.append(discount, rest);
+  } else {
+    for (let i = 0; i < visual.denominator; i++) {
+      surface.append(element('span', i < visual.numerator ? 'filled' : 'empty'));
+    }
+  }
+  const legend = element('figcaption', '', visual.caption);
+  figure.append(intro, surface, legend);
+  return figure;
+}
+function renderReasoning(exercise) {
+  const section = element('section', 'reasoning-steps');
+  section.append(element('h2', '', 'Entendé el procedimiento'));
+  const steps = element('ol');
+  for (const step of exercise.steps) steps.append(element('li', '', step));
+  section.append(steps, element('p', 'reflection', exercise.reflection));
+  return section;
+}
+
+function finishQuestion(exercise, isCorrect) {
+  state.records.push({ id: exercise.id, phase: exercise.phase, correct: isCorrect,
+    attempts: state.attempts, hintsUsed: state.hintsShown });
+  state.submitted = true;
+  state.correct = isCorrect;
+  state.message = '';
+  showQuestion();
+  goTop();
+}
 
 function welcome() {
   resetView();
@@ -31,7 +71,8 @@ function welcome() {
     element('h1', '', 'Las respuestas importan. Tu forma de pensar, más.'),
     element('p', 'lead', 'Una experiencia cortita para descubrir cómo funcionan los porcentajes. Lo más importante: poder resolver problemas por tu cuenta.'),
     button('Empezar a explorar →', false, () => { showQuestion(); goTop(); }),
-    element('p', 'care-note', '8 actividades · A tu ritmo · Sin cuentas ni datos guardados')
+    button('Para revisión: alternar formularios ' + (state.form === 'A' ? 'A → B' : 'B → A'), true, () => { state = makeSession(state.form === 'A' ? 'B' : 'A'); welcome(); }),
+    element('p', 'care-note', '9 actividades · A tu ritmo · Sin cuentas ni datos guardados')
   );
   const art = element('div', 'hero-art');
   art.setAttribute('aria-hidden', 'true');
@@ -44,7 +85,7 @@ function welcome() {
   const grid = element('section', 'how-grid');
   grid.setAttribute('aria-label', 'Cómo funciona');
   for (const [number, title, description] of [
-    ['01', 'Descubrí tu punto de partida', 'Dos preguntas sin pistas. No es un examen.'],
+    ['01', 'Descubrí tu punto de partida', 'Tres preguntas sin pistas. No es un examen.'],
     ['02', 'Aprendé con pistas', 'Probá estrategias y pedí ayuda si hace falta.'],
     ['03', 'Hacelo por tu cuenta', 'Terminá con desafíos nuevos sin ayuda automática.']
   ]) {
@@ -53,20 +94,11 @@ function welcome() {
     grid.append(item);
   }
   host.append(section, grid, element('p', 'demonstrator-note',
-    'Prototipo de investigación para revisión con personas adultas y datos sintéticos. No validado para uso infantil.'));
+    'Prototipo de investigación para revisión con personas adultas. Formularios A/B sin equivalencia validada. No apto todavía para uso infantil.'));
 }
 
-function finishQuestion(exercise, isCorrect) {
-  state.records.push({ id: exercise.id, phase: exercise.phase, correct: isCorrect,
-    attempts: state.attempts, hintsUsed: state.hintsShown });
-  state.submitted = true;
-  state.correct = isCorrect;
-  state.message = '';
-  showQuestion();
-  goTop();
-}
 function showQuestion() {
-  const exercise = getExercise(state.index);
+  const exercise = getExercise(state.index, state.exercises);
   if (!exercise) { showSummary(); return; }
   resetView();
   const stage = PHASES.find(p => p.id === exercise.phase);
@@ -86,18 +118,18 @@ function showQuestion() {
   const workspace = element('div', 'workspace');
   const heading = element('div', 'workspace-top');
   heading.append(element('span', 'tag', 'Etapa ' + (phaseNumber + 1) + ' de 3'),
-    element('span', 'question-count', 'Actividad ' + (state.index + 1) + ' de ' + EXERCISES.length));
+    element('span', 'question-count', 'Actividad ' + (state.index + 1) + ' de ' + state.exercises.length));
   const track = element('div', 'progress-track');
   track.setAttribute('role', 'progressbar');
   track.setAttribute('aria-label', 'Progreso del recorrido');
   track.setAttribute('aria-valuemin', '0');
-  track.setAttribute('aria-valuemax', String(EXERCISES.length));
+  track.setAttribute('aria-valuemax', String(state.exercises.length));
   track.setAttribute('aria-valuenow', String(state.index));
   const progress = element('div');
-  progress.style.width = (state.index / EXERCISES.length * 100) + '%';
+  progress.style.width = (state.index / state.exercises.length * 100) + '%';
   track.append(progress);
-  const question = element('article', 'question-card');
-  question.append(element('p', 'eyebrow', stage.name), element('h1', '', exercise.prompt),
+  const card = element('article', 'question-card');
+  card.append(element('p', 'eyebrow', stage.name), element('h1', '', exercise.prompt),
     element('p', 'phase-description', stage.description));
   if (state.submitted) {
     const result = element('div', 'result-message');
@@ -105,8 +137,9 @@ function showQuestion() {
     result.append(element('strong', '', exercise.phase === 'practice' ?
       (state.correct ? '¡Bien razonado!' : 'Seguí explorando') : 'Respuesta registrada'),
       element('p', '', exercise.phase === 'practice' ? exercise.explanation :
-        'Revisaremos los resultados al final. Durante esta etapa no mostramos respuestas ni pistas.'));
-    question.append(result, button(state.index === EXERCISES.length - 1 ? 'Ver mi recorrido →' : 'Continuar →', false, next));
+        'Revisaremos las soluciones al final. Durante esta etapa no mostramos respuestas ni pistas.'));
+    if (exercise.phase === 'practice') result.append(renderReasoning(exercise));
+    card.append(result, button(state.index === state.exercises.length - 1 ? 'Ver mi recorrido →' : 'Continuar →', false, next));
   } else {
     const form = element('form');
     form.noValidate = true;
@@ -139,6 +172,7 @@ function showQuestion() {
         document.querySelector('#answer')?.focus();
       }));
     }
+    if (exercise.phase === 'practice' && exercise.visual) card.append(renderVisual(exercise.visual));
     form.append(label, inputGroup);
     const helper = element('p', 'helper', 'Podés usar coma decimal. No uses puntos de miles.');
     helper.id = 'answer-helper';
@@ -167,9 +201,9 @@ function showQuestion() {
       }
       finishQuestion(exercise, assessment.correct);
     });
-    question.append(form);
+    card.append(form);
   }
-  workspace.append(heading, track, question,
+  workspace.append(heading, track, card,
     element('p', 'learning-tip', exercise.phase === 'transfer' ?
       'Ahora resolvés sin pistas: lo valioso es lo que podés hacer por tu cuenta.' :
       'No importa ir rápido. Importa descubrir por qué funciona tu respuesta.'));
@@ -192,7 +226,7 @@ function showSummary() {
   const root = element('section', 'summary');
   root.append(element('p', 'eyebrow', 'FIN DEL RECORRIDO · COMIENZO DE TU CURIOSIDAD'),
     element('h1', '', 'Lo valioso es seguir aprendiendo.'),
-    element('p', 'lead', 'Completaste ocho desafíos. Mirá qué resolviste sin ayuda y cómo funcionan los problemas finales.'));
+    element('p', 'lead', 'Completaste nueve desafíos. Los formularios inicial y final evalúan las mismas habilidades con diferentes problemas, pero su equivalencia aún no está validada.'));
   const stats = element('div', 'score-grid');
   for (const [title, score, explanation] of [
     ['Punto de partida', summary.diagnosis, 'Respuestas iniciales sin pistas'],
@@ -207,15 +241,16 @@ function showSummary() {
   root.append(stats);
   const solutions = element('div', 'solutions');
   solutions.append(element('h2', '', 'Explorá las soluciones finales'), element('p', '', 'Una respuesta es más útil si entendés por qué.'));
-  EXERCISES.filter(x => x.phase === 'transfer').forEach(exercise => {
+  state.exercises.filter(x => x.phase === 'transfer').forEach(exercise => {
     const details = element('details');
     details.append(element('summary', '', exercise.prompt), element('p', '', exercise.explanation));
     solutions.append(details);
   });
   root.append(solutions,
-    element('p', 'disclaimer', 'Importante: ocho ejercicios no permiten diagnosticar conocimientos ni medir mejoras. Los problemas iniciales y finales no son equivalentes. No es una evaluación escolar.'),
-    button('Volver a empezar ↗', false, () => { state = makeSession(); welcome(); goTop(); }));
+    element('p', 'disclaimer', 'Importante: una sesión corta con problemas emparejados por diseño NO demuestra mejora, retención, equivalencia psicométrica ni impacto causal. No es una evaluación escolar.'),
+    button('Volver a empezar ↗', false, () => { state = makeSession(state.form); welcome(); goTop(); }));
   host.append(root);
   goTop();
 }
+
 welcome();
