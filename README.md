@@ -57,6 +57,26 @@ La inteligencia artificial es un medio, no el fin. Aprendauta nunca debe sustitu
 
 El trabajo fundacional se revisa en el [PR #1](https://github.com/barbasmarcosi/Aprendauta/pull/1). Las tareas iniciales quedan registradas en [Issues](https://github.com/barbasmarcosi/Aprendauta/issues).
 
+## Demostrador de porcentajes
+
+Ya existe una **primera experiencia técnica** de matemáticas, sin IA, usuarios, analítica ni almacenamiento. Tiene tres etapas: dos preguntas iniciales, tres ejercicios guiados con pistas y tres problemas independientes.
+
+**Ejecutar localmente** (requiere Node.js para tests y Python 3 para el servidor de archivos):
+
+```bash
+npm test
+python3 -m http.server 8080
+```
+
+Abrí `http://localhost:8080` en el navegador. No requiere instalación de dependencias JavaScript, backend ni API. Para revisar el enfoque y las fuentes:
+
+- [Estado del arte y selección del problema](docs/research/ESTADO_DEL_ARTE.md)
+- [Especificación pedagógica y límites](docs/research/ESPECIFICACION_PORCENTAJES_V0.md)
+- [Registro de herramientas para reutilizar](docs/research/EVALUACION_FUENTES_Y_REUSO.md)
+- [Guía de verificación local](docs/research/COMO_PROBAR_EL_DEMOSTRADOR.md)
+
+**Advertencia:** que el software funcione no demuestra que sea eficaz para enseñar. Este prototipo todavía no está aprobado para uso con menores.
+
 ## Participar
 
 Este repositorio recogerá decisiones, propuestas y avances del proyecto. Las contribuciones técnicas, pedagógicas y comunitarias serán bienvenidas una vez definidas las pautas de colaboración y protección infantil.
