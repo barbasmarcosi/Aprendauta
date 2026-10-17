@@ -95,3 +95,34 @@ export function getSummary(records) {
 }
 export function getExercise(index, exercises = EXERCISES) { return exercises[index] ?? null; }
 export function isIndependentPhase(phase) { return phase === 'diagnosis' || phase === 'transfer'; }
+
+ 
+// La autopercepción no equivale a un diagnóstico ni a una medida de capacidad.
+export const CONFIDENCE_LEVELS = Object.freeze([
+  { id: 'low', label: 'Baja' },
+  { id: 'medium', label: 'Media' },
+  { id: 'high', label: 'Alta' },
+]);
+export const SKILL_NAMES = Object.freeze({
+  'equivalencias': 'Fracciones y porcentajes',
+  'porcentaje-de-cantidad': 'Porcentaje de una cantidad',
+  'descuento': 'Descuentos y precio final',
+});
+export function confidenceLabel(id) {
+  return CONFIDENCE_LEVELS.find(level => level.id === id)?.label ?? 'No indicada';
+}
+/** Fotografías por competencia, no puntajes de progreso ni diagnósticos. */
+export function getSkillReview(records, exercises) {
+  const independent = exercises.filter(item => isIndependentPhase(item.phase));
+  const byId = new Map(records.map(record => [record.id, record]));
+  const seen = new Set();
+  return independent.filter(item => !seen.has(item.skill) && seen.add(item.skill)).map(item => {
+    const byPhase = phase => {
+      const match = independent.find(candidate => candidate.skill === item.skill && candidate.phase === phase);
+      const record = match && byId.get(match.id);
+      return record ? { correct: Boolean(record.correct), confidence: confidenceLabel(record.confidence) } : null;
+    };
+    return { skill: item.skill, name: SKILL_NAMES[item.skill] ?? item.skill,
+      diagnosis: byPhase('diagnosis'), transfer: byPhase('transfer') };
+  });
+}

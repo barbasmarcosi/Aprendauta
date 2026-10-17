@@ -1,4 +1,4 @@
-import { PHASES, createSequence, getExercise, checkAnswer, getSummary } from './engine.mjs';
+import { PHASES, createSequence, getExercise, checkAnswer, getSummary, getSkillReview, CONFIDENCE_LEVELS } from './engine.mjs';
 import { diagnosePracticeAnswer } from './diagnostics.mjs';
 
 const host = document.querySelector('#app');
@@ -6,7 +6,7 @@ const main = document.querySelector('#content');
 let state = makeSession();
 
 function makeSession(form = 'A') {
-  return { form, exercises: createSequence(form), index: 0, attempts: 0, hintsShown: 0, submitted: false, correct: false, message: '', feedback: null, showAlternative: false, draft: '', records: [] };
+  return { form, exercises: createSequence(form), index: 0, attempts: 0, hintsShown: 0, submitted: false, correct: false, message: '', feedback: null, showAlternative: false, draft: '', confidence: null, records: [] };
 }
 function element(tag, className, text) {
   const el = document.createElement(tag);
@@ -54,14 +54,16 @@ function renderReasoning(exercise) {
 }
 
 function finishQuestion(exercise, isCorrect) {
-  state.records.push({ id: exercise.id, phase: exercise.phase, correct: isCorrect,
-    attempts: state.attempts, hintsUsed: state.hintsShown });
+  state.records.push({ id: exercise.id, skill: exercise.skill, phase: exercise.phase, correct: isCorrect,
+    attempts: state.attempts, hintsUsed: state.hintsShown,
+    confidence: exercise.phase === 'practice' ? null : state.confidence });
   state.submitted = true;
   state.correct = isCorrect;
   state.message = '';
   state.feedback = null;
   state.showAlternative = false;
   state.draft = '';
+  state.confidence = null;
   showQuestion();
   goTop();
 }
@@ -183,6 +185,29 @@ function showQuestion() {
     const helper = element('p', 'helper', 'Podés usar coma decimal. No uses puntos de miles.');
     helper.id = 'answer-helper';
     form.append(helper, feedback);
+    if (exercise.phase !== 'practice') {
+      const confidence = element('fieldset', 'confidence-panel');
+      confidence.append(element('legend', '', '¿Cuánta confianza tenés en tu respuesta? (opcional)'),
+        element('p', 'confidence-note', 'No cambia la corrección. Es una forma de revisar cómo estimás tus propias respuestas.'));
+      const choices = element('div', 'confidence-choices');
+      const buttons = CONFIDENCE_LEVELS.map(level => {
+        const choice = button(level.label, true, () => {
+          state.confidence = state.confidence === level.id ? null : level.id;
+          for (const node of buttons) {
+            const selected = node.confidenceId === state.confidence;
+            node.setAttribute('aria-pressed', String(selected));
+            node.className = selected ? 'confidence-choice selected' : 'confidence-choice';
+          }
+        });
+        choice.confidenceId = level.id;
+        choice.className = level.id === state.confidence ? 'confidence-choice selected' : 'confidence-choice';
+        choice.setAttribute('aria-pressed', String(level.id === state.confidence));
+        return choice;
+      });
+      choices.append(...buttons);
+      confidence.append(choices);
+      form.append(confidence);
+    }
     if (exercise.phase === 'practice' && state.feedback) {
       const insight = element('section', 'diagnostic-support');
       insight.setAttribute('aria-label', 'Ayuda para revisar una posible confusión');
@@ -249,6 +274,7 @@ function next() {
   state.feedback = null;
   state.showAlternative = false;
   state.draft = '';
+  state.confidence = null;
   showQuestion();
   goTop();
 }
@@ -271,13 +297,36 @@ function showSummary() {
     stats.append(card);
   }
   root.append(stats);
+  const review = element('section', 'skill-review');
+  review.append(element('h2', '', 'Revisá tus ideas, habilidad por habilidad'),
+    element('p', 'skill-review-caption', 'La confianza es una impresión personal, no una nota. Compará ambas respuestas con curiosidad.'));
+  const skillGrid = element('div', 'skill-review-grid');
+  for (const skill of getSkillReview(state.records, state.exercises)) {
+    const tile = element('article', 'skill-tile');
+    tile.append(element('h3', '', skill.name));
+    for (const [phaseName, observation] of [['Al empezar', skill.diagnosis], ['Al finalizar', skill.transfer]]) {
+      const line = element('div', 'skill-observation');
+      line.append(element('span', '', phaseName),
+        element('strong', '', observation?.correct ? 'Correcta' : 'Para revisar'),
+        element('small', '', 'Confianza: ' + (observation?.confidence ?? 'No indicada')));
+      tile.append(line);
+    }
+    skillGrid.append(tile);
+  }
+  review.append(skillGrid, element('p', 'skill-caution',
+    'Son apenas dos fotografías de ejercicios distintos. Las diferencias no prueban mejora ni identifican dificultades personales.'));
+  root.append(review);
   const solutions = element('div', 'solutions');
-  solutions.append(element('h2', '', 'Explorá las soluciones finales'), element('p', '', 'Una respuesta es más útil si entendés por qué.'));
-  state.exercises.filter(x => x.phase === 'transfer').forEach(exercise => {
-    const details = element('details');
-    details.append(element('summary', '', exercise.prompt), element('p', '', exercise.explanation));
-    solutions.append(details);
-  });
+  solutions.append(element('h2', '', 'Revisá las soluciones de ambos momentos'),
+    element('p', '', 'Una respuesta es más útil si entendés por qué. Las soluciones aparecen solo después de completar toda la experiencia.'));
+  for (const [phase, title] of [['diagnosis', 'Al empezar'], ['transfer', 'Al finalizar']]) {
+    solutions.append(element('h3', '', title));
+    state.exercises.filter(x => x.phase === phase).forEach(exercise => {
+      const details = element('details');
+      details.append(element('summary', '', exercise.prompt), element('p', '', exercise.explanation));
+      solutions.append(details);
+    });
+  }
   root.append(solutions,
     element('p', 'disclaimer', 'Importante: una sesión corta con problemas emparejados por diseño NO demuestra mejora, retención, equivalencia psicométrica ni impacto causal. No es una evaluación escolar.'),
     button('Volver a empezar ↗', false, () => { state = makeSession(state.form); welcome(); goTop(); }));
