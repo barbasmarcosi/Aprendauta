@@ -22,3 +22,14 @@
 
 .percent-bar{display:flex;width:min(100%,360px);height:55px;border-radius:10px;overflow:hidden;gap:3px}
 .percent-bar .filled{background:#467f61}.percent-bar .empty{background:#d8e7db}
+
+/* Apoyos sobre indicios de error, sin afirmar diagnósticos ni etiquetar alumnos. */
+.diagnostic-support{margin:17px 0 4px;padding:18px 20px;border-radius:15px;border:1px solid #c9dbd7;background:#f4f8f6;color:#2b5745}
+.diagnostic-support .support-eyebrow{margin:0 0 9px;color:#61796f;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-weight:850}
+.diagnostic-support h2{font-size:1.1rem;letter-spacing:-.02em;margin:0 0 8px}
+.diagnostic-support p{font-size:.9rem;line-height:1.55;margin:8px 0}
+.diagnostic-support .support-prompt{font-weight:740}
+.diagnostic-support .secondary{margin:10px 0 0;min-height:44px}
+.alternate-strategy{margin:13px 0 0;border-left:3px solid #68a480;padding:8px 12px;background:white;border-radius:0 9px 9px 0}
+.alternate-strategy p{margin:5px 0 0}
+@media(max-width:700px){.diagnostic-support{padding:15px}.diagnostic-support h2{font-size:1rem}}
