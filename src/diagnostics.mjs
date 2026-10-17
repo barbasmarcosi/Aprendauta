@@ -38,7 +38,7 @@ export const PRACTICE_PATTERNS = Object.freeze({
       "title": "¿Proporción o cantidad?",
       "message": "Ese valor representa la proporción 20 %, no necesariamente la cantidad solicitada.",
       "prompt": "¿Cómo usarías esa proporción con el total de 150 libros?",
-      "alternative": "El 0,2 dice qué parte corresponde a cada libro del total; ahora aplicalo a la cantidad total."
+      "alternative": "El 0,2 representa una quinta parte del total; ahora calculá cuántos libros hay en esa parte."
     }
   ],
   "p2": [
