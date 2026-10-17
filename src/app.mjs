@@ -1,11 +1,12 @@
 import { PHASES, createSequence, getExercise, checkAnswer, getSummary } from './engine.mjs';
+import { diagnosePracticeAnswer } from './diagnostics.mjs';
 
 const host = document.querySelector('#app');
 const main = document.querySelector('#content');
 let state = makeSession();
 
 function makeSession(form = 'A') {
-  return { form, exercises: createSequence(form), index: 0, attempts: 0, hintsShown: 0, submitted: false, correct: false, message: '', records: [] };
+  return { form, exercises: createSequence(form), index: 0, attempts: 0, hintsShown: 0, submitted: false, correct: false, message: '', feedback: null, showAlternative: false, draft: '', records: [] };
 }
 function element(tag, className, text) {
   const el = document.createElement(tag);
@@ -58,6 +59,9 @@ function finishQuestion(exercise, isCorrect) {
   state.submitted = true;
   state.correct = isCorrect;
   state.message = '';
+  state.feedback = null;
+  state.showAlternative = false;
+  state.draft = '';
   showQuestion();
   goTop();
 }
@@ -155,6 +159,8 @@ function showQuestion() {
     input.spellcheck = false;
     input.maxLength = 30;
     input.placeholder = 'Escribí un número';
+    input.value = state.draft;
+    input.addEventListener('input', () => { state.draft = input.value; });
     input.setAttribute('aria-describedby', 'answer-helper answer-feedback');
     inputGroup.append(input, element('span', '', exercise.unit));
     const feedback = element('p', 'feedback', state.message);
@@ -177,6 +183,26 @@ function showQuestion() {
     const helper = element('p', 'helper', 'Podés usar coma decimal. No uses puntos de miles.');
     helper.id = 'answer-helper';
     form.append(helper, feedback);
+    if (exercise.phase === 'practice' && state.feedback) {
+      const insight = element('section', 'diagnostic-support');
+      insight.setAttribute('aria-label', 'Ayuda para revisar una posible confusión');
+      insight.append(element('p', 'support-eyebrow', 'Una pista a partir de tu respuesta'),
+        element('h2', '', state.feedback.title),
+        element('p', '', state.feedback.message),
+        element('p', 'support-prompt', state.feedback.prompt));
+      if (state.showAlternative) {
+        const alternate = element('div', 'alternate-strategy');
+        alternate.append(element('strong', '', 'Otra forma de pensarlo'), element('p', '', state.feedback.alternative));
+        insight.append(alternate);
+      } else {
+        insight.append(button('Explorar otra estrategia', true, () => {
+          state.showAlternative = true;
+          showQuestion();
+          document.querySelector('#answer')?.focus();
+        }));
+      }
+      form.append(insight);
+    }
     if (state.hintsShown > 0 && exercise.hints) {
       const panel = element('div', 'hint-panel');
       exercise.hints.slice(0, state.hintsShown).forEach((hint, i) => panel.append(element('p', '', 'Pista ' + (i + 1) + '. ' + hint)));
@@ -192,9 +218,12 @@ function showQuestion() {
         input.focus();
         return;
       }
+      state.draft = input.value;
       state.attempts++;
       if (exercise.phase === 'practice' && !assessment.correct && state.attempts < 2) {
-        state.message = 'Todavía no. Probá otra estrategia o pedí una pista.';
+        state.feedback = diagnosePracticeAnswer(exercise, assessment);
+        state.showAlternative = false;
+        state.message = 'Todavía no. Revisá la idea que aparece abajo y volvé a intentar.';
         showQuestion();
         document.querySelector('#answer')?.focus();
         return;
@@ -217,6 +246,9 @@ function next() {
   state.submitted = false;
   state.correct = false;
   state.message = '';
+  state.feedback = null;
+  state.showAlternative = false;
+  state.draft = '';
   showQuestion();
   goTop();
 }
