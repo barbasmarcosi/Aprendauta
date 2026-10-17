@@ -77,6 +77,18 @@ Abrí `http://localhost:8080` en el navegador. No requiere instalación de depen
 
 **Advertencia:** que el software funcione no demuestra que sea eficaz para enseñar. Este prototipo todavía no está aprobado para uso con menores.
 
+## Iteración v1: aprender con representaciones y evaluar sin pistas
+
+La segunda iteración del demostrador (rama `feature/aprendizaje-visual-evaluacion-v1`) incorpora **9 actividades** distribuidas en tres etapas: diagnóstico independiente, práctica guiada con diagramas accesibles y evaluación final independiente.
+
+Hay dos formularios de evaluación, **A y B**, que cubren las mismas tres competencias con enunciados distintos y se pueden revisar en orden `A → B` o `B → A`. **No están calibrados ni validados como equivalentes** y no permiten afirmar mejoras de aprendizaje.
+
+- [Protocolo de revisión por docentes (sin menores)](docs/research/PROTOCOLO_REVISION_DOCENTE_V1.md)
+- [Diseño de formularios A/B y límites de evaluación](docs/research/DISENO_EVALUACION_AB_V1.md)
+- [Resultados de las pruebas técnicas y limitaciones](docs/research/RESULTADOS_TECNICOS_V1.md)
+
+La experiencia sigue funcionando sin cuentas, sin backend y sin IA. Las representaciones y las explicaciones aparecen solo en práctica; el diagnóstico y la transferencia no dan pistas.
+
 ## Participar
 
 Este repositorio recogerá decisiones, propuestas y avances del proyecto. Las contribuciones técnicas, pedagógicas y comunitarias serán bienvenidas una vez definidas las pautas de colaboración y protección infantil.
