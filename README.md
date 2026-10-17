@@ -89,6 +89,12 @@ Hay dos formularios de evaluación, **A y B**, que cubren las mismas tres compet
 
 La experiencia sigue funcionando sin cuentas, sin backend y sin IA. Las representaciones y las explicaciones aparecen solo en práctica; el diagnóstico y la transferencia no dan pistas.
 
+## Aprender de las respuestas sin diagnosticar estudiantes
+
+El demostrador incorpora [feedback contextual por reglas revisables](docs/research/APOYOS_POR_ERRORES_V2.md): durante la práctica, algunos valores numéricos pueden sugerir **posibles** confusiones, por ejemplo el importe del descuento en lugar del precio final. Se ofrece una pregunta orientadora y una alternativa conceptual, sin revelar la solución prematuramente. Las respuestas no reconocidas reciben una orientación neutral.
+
+**La coincidencia con una regla no prueba cómo razonó una persona**. No hay perfilado, IA ni almacenamiento. Diagnóstico inicial y transferencia final permanecen sin ayudas. Este enfoque necesita revisión docente y pruebas de aprendizaje antes de uso con menores.
+
 ## Participar
 
 Este repositorio recogerá decisiones, propuestas y avances del proyecto. Las contribuciones técnicas, pedagógicas y comunitarias serán bienvenidas una vez definidas las pautas de colaboración y protección infantil.
