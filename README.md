@@ -119,6 +119,12 @@ Tras una auditoría exploratoria de la demo, se definió una evolución enfocada
 
 **Criterio central:** el modo libre de explorar no puede confundirse con una evaluación diagnóstica anterior al aprendizaje. Solo debemos informar lo que realmente se pudo resolver de forma independiente. Las pruebas con menores siguen bloqueadas hasta cumplir los controles exigidos.
 
+## Backlog de implementación v2
+
+La planificación se revisa en el [PR #11](https://github.com/barbasmarcosi/Aprendauta/pull/11). Las siete tareas de ejecución están registradas en [issues #12–#18](https://github.com/barbasmarcosi/Aprendauta/issues?q=is%3Aissue+is%3Aopen+%22Aprendauta+v2%22), con dependencias y criterios de aceptación; el [plan de ejecución](docs/product/EJECUCION_V2.md) las organiza.
+
+**La nueva misión aún no está implementada:** la demo de Pages permanece como prototipo de nueve ejercicios.
+
 ## Participar
 
 Este repositorio recogerá decisiones, propuestas y avances del proyecto. Las contribuciones técnicas, pedagógicas y comunitarias serán bienvenidas una vez definidas las pautas de colaboración y protección infantil.

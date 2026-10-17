@@ -17,6 +17,18 @@
 
 G0–G4 están definidos en [VALIDACION_V2.md](VALIDACION_V2.md). **E7 no se implementa ni se ejecuta** durante el desarrollo del demostrador.
 
+## Backlog ejecutable en GitHub
+
+- **E0** — [#12 Diseño de misión y contenido](https://github.com/barbasmarcosi/Aprendauta/issues/12)
+- **E1** — [#13 Misión interactiva](https://github.com/barbasmarcosi/Aprendauta/issues/13)
+- **E2** — [#14 Ayuda y errores](https://github.com/barbasmarcosi/Aprendauta/issues/14)
+- **E3** — [#15 UX y lenguaje](https://github.com/barbasmarcosi/Aprendauta/issues/15)
+- **E4** — [#16 Evaluación independiente](https://github.com/barbasmarcosi/Aprendauta/issues/16)
+- **E5** — [#17 Accesibilidad y PWA](https://github.com/barbasmarcosi/Aprendauta/issues/17)
+- **E6** — [#18 Revisión docente](https://github.com/barbasmarcosi/Aprendauta/issues/18)
+
+**Control de dependencias:** E0 → E1 → (E2, E3, E4); E5 acompaña toda la implementación; E6 requiere evidencias de los anteriores. E7 permanece bloqueado y depende del [issue #4 de seguridad infantil](https://github.com/barbasmarcosi/Aprendauta/issues/4).
+
 ## 1. Primer incremento que se debería implementar
 
 **Objetivo único:** una misión «Detective de ofertas» con un ejemplo interactivo accesible y un problema independiente distinto. El resultado debe poder revisarse sin IA, en Pages y sin cuentas.
