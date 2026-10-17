@@ -1,0 +1,70 @@
+name: Publicar Aprendauta en GitHub Pages
+
+on:
+  push:
+    branches: [gh-pages]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages-aprendauta
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Probar y publicar demo PWA
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Descargar gh-pages
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validar tests
+        run: npm test
+
+      - name: Intentar reparar Pages y quitar dominio incorrecto
+        id: repair
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # La API puede requerir administración adicional a GITHUB_TOKEN.
+          # Si no está permitido, el workflow sigue y el error queda explícito.
+          printf '{"build_type":"workflow","cname":null}\n' |
+            gh api --method PUT "repos/${GITHUB_REPOSITORY}/pages" --input -
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Preparar sitio público sin tests ni documentos internos
+        run: |
+          set -euo pipefail
+          mkdir -p _site/src _site/icons
+          cp index.html styles.css sw.js manifest.webmanifest .nojekyll _site/
+          cp src/app.mjs src/engine.mjs src/diagnostics.mjs src/pwa.mjs _site/src/
+          cp icons/icon-192.png icons/icon-512.png _site/icons/
+          test -s _site/index.html
+          test -s _site/sw.js
+          test -s _site/manifest.webmanifest
+
+      - name: Subir artefacto para Pages
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
